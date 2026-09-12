@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>vivi — i am here</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -29,7 +30,6 @@ textarea,input{font-family:inherit;}
 
 .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px;}
 
-/* ---------- HERO ---------- */
 .hero{
   padding:56px 20px 40px;
   text-align:center;
@@ -39,91 +39,34 @@ textarea,input{font-family:inherit;}
     radial-gradient(circle at 50% 0%, rgba(224,32,26,.08), transparent 55%),
     radial-gradient(circle at 50% 100%, rgba(46,204,113,.06), transparent 60%);
 }
-.logo-ring{
-  width:74px;height:74px;margin:0 auto 18px;
-  position:relative;
-}
+.logo-ring{width:74px;height:74px;margin:0 auto 18px;position:relative;}
 .logo-ring svg{width:100%;height:100%;display:block;}
-.logo-ring .pulse{
-  position:absolute;inset:-10px;border-radius:50%;
-  border:1px solid var(--red);
-  opacity:0;
-  animation:pulse 3.2s ease-out infinite;
-}
-@keyframes pulse{
-  0%{transform:scale(.82);opacity:.55;}
-  70%{transform:scale(1.35);opacity:0;}
-  100%{opacity:0;}
-}
-.hero h1{
-  font-family:'Permanent Marker',cursive;
-  font-weight:400;
-  font-size:clamp(1.5rem,4.4vw,2.4rem);
-  line-height:1.35;
-  margin:0 0 6px;
-  color:#f4f4f4;
-}
-.hero .byline{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.78rem;
-  color:var(--muted);
-  letter-spacing:.02em;
-}
+.logo-ring .pulse{position:absolute;inset:-10px;border-radius:50%;border:1px solid var(--red);opacity:0;animation:pulse 3.2s ease-out infinite;}
+@keyframes pulse{0%{transform:scale(.82);opacity:.55;}70%{transform:scale(1.35);opacity:0;}100%{opacity:0;}}
+.hero h1{font-family:'Permanent Marker',cursive;font-weight:400;font-size:clamp(1.5rem,4.4vw,2.4rem);line-height:1.35;margin:0 0 6px;color:#f4f4f4;}
+.hero .byline{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);letter-spacing:.02em;}
 .hero .byline b{color:var(--green);font-weight:500;}
 
-/* ---------- NAV ---------- */
-nav{
-  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-  position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(6px);
-  z-index:10;
-}
-.tab{
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--muted);
-  padding:8px 16px;
-  font-size:.85rem;
-  clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
-  transition:color .15s, border-color .15s;
-}
+nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(6px);z-index:10;}
+.tab{background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:8px 16px;font-size:.85rem;clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);transition:color .15s, border-color .15s;}
 .tab:hover{color:var(--text);border-color:var(--green);}
 .tab.active{color:#fff;border-color:var(--red);box-shadow:0 0 0 1px var(--red-glow) inset;}
-.admin-btn{
-  margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);
-  width:34px;height:34px;border-radius:50%;font-size:.9rem;
-}
+.admin-btn{margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);width:34px;height:34px;border-radius:50%;font-size:.9rem;}
 .admin-btn:hover{border-color:var(--gold);color:var(--gold);}
 
 main{padding-top:28px;}
 .section{display:none;}
 .section.active{display:block;}
+h2.section-title{font-family:'Permanent Marker',cursive;font-weight:400;font-size:1.3rem;margin:0 0 18px;color:#f0f0f0;}
 
-h2.section-title{
-  font-family:'Permanent Marker',cursive;font-weight:400;
-  font-size:1.3rem;margin:0 0 18px;color:#f0f0f0;
-}
-
-/* ---------- POST CARD ---------- */
-.post-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-left:3px solid var(--green);
-  padding:16px 18px;margin-bottom:14px;position:relative;
-  transition:border-color .15s, transform .15s;
-}
+.post-card{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);padding:16px 18px;margin-bottom:14px;position:relative;transition:border-color .15s, transform .15s;}
 .post-card:hover{border-left-color:var(--red);transform:translateX(2px);}
-.post-card .corner{
-  position:absolute;top:6px;right:8px;
-  font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);
-}
-.post-card h3{
-  margin:0 0 6px;font-size:1.05rem;font-weight:600;cursor:pointer;
-}
+.post-card .corner{position:absolute;top:6px;right:8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);}
+.post-card h3{margin:0 0 6px;font-size:1.05rem;font-weight:600;cursor:pointer;}
 .post-card h3:hover{color:var(--green);}
 .post-card p.snippet{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;}
 .empty{color:var(--muted);font-size:.9rem;font-style:italic;padding:20px 0;}
 
-/* ---------- ARTICLE DETAIL ---------- */
 .article-detail{background:var(--panel);border:1px solid var(--border);padding:22px 22px 10px;}
 .back-link{background:none;border:none;color:var(--muted);font-size:.82rem;margin-bottom:14px;padding:0;}
 .back-link:hover{color:var(--green);}
@@ -132,10 +75,7 @@ h2.section-title{
 .article-body{white-space:pre-wrap;line-height:1.7;font-size:.96rem;color:#dcdcdc;margin-bottom:20px;}
 
 .reaction-bar{display:flex;gap:10px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap;}
-.rbtn{
-  background:var(--panel-2);border:1px solid var(--border);color:var(--muted);
-  padding:7px 13px;font-size:.82rem;display:flex;align-items:center;gap:6px;
-}
+.rbtn{background:var(--panel-2);border:1px solid var(--border);color:var(--muted);padding:7px 13px;font-size:.82rem;display:flex;align-items:center;gap:6px;}
 .rbtn:hover{color:var(--text);}
 .rbtn.like.on{color:var(--green);border-color:var(--green);}
 .rbtn.dislike.on{color:var(--red);border-color:var(--red);}
@@ -152,7 +92,6 @@ h2.section-title{
 .btn.red{border-color:var(--red);color:var(--red);}
 .btn.red:hover{background:var(--red);color:#fff;}
 
-/* ---------- VOTE ---------- */
 .topic-row{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);padding:12px 16px;margin-bottom:10px;}
 .topic-row .rank{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.8rem;width:20px;}
 .topic-row .ttext{flex:1;font-size:.92rem;}
@@ -161,16 +100,12 @@ h2.section-title{
 .vote-btn.on{color:var(--red);border-color:var(--red);}
 .vote-btn:hover{color:var(--green);border-color:var(--green);}
 
-/* ---------- ABOUT ---------- */
 .about-box{background:var(--panel);border:1px solid var(--border);padding:20px;white-space:pre-wrap;line-height:1.7;font-size:.94rem;color:#dcdcdc;}
 
-/* ---------- ADMIN ---------- */
 .admin-lock{max-width:320px;margin:60px auto;text-align:center;}
 .admin-lock input{width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:10px 12px;margin:12px 0;font-size:.9rem;}
 .admin-panel label{display:block;font-size:.78rem;color:var(--muted);margin:14px 0 5px;font-family:'JetBrains Mono',monospace;}
-.admin-panel input[type=text], .admin-panel textarea{
-  width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-size:.9rem;
-}
+.admin-panel input[type=text], .admin-panel textarea{width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-size:.9rem;}
 .admin-panel textarea{min-height:120px;resize:vertical;font-family:'Inter',sans-serif;}
 .admin-block{background:var(--panel);border:1px solid var(--border);padding:18px;margin-bottom:20px;}
 .admin-block h4{margin:0 0 4px;font-size:.95rem;color:var(--gold);}
@@ -209,10 +144,9 @@ footer{text-align:center;padding:30px 20px;color:var(--muted);font-family:'JetBr
 </nav>
 
 <main class="wrap">
-
   <section class="section active" id="sec-recent">
     <h2 class="section-title">recent additions</h2>
-    <div id="recentList"></div>
+    <div id="recentList"><p class="empty">loading...</p></div>
   </section>
 
   <section class="section" id="sec-all">
@@ -238,62 +172,54 @@ footer{text-align:center;padding:30px 20px;color:var(--muted);font-family:'JetBr
   <section class="section" id="sec-admin">
     <div id="adminArea"></div>
   </section>
-
 </main>
 
 <footer>vivi's diary — everything here is fiction until it isn't</footer>
 
 <script>
+/* ---------- SUPABASE SETUP ---------- */
+const SUPA_URL = "https://bjuqhcugnwulxecvpmol.supabase.co";
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqdXFoY3Vnbnd1bHhlY3ZwbW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxOTEyMjYsImV4cCI6MjEwNDc2NzIyNn0.puhr_xTIMlIk1-MsO0M7DW1zuAKshOrOWFCSr56wKLU";
+const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
 const ADMIN_CODE = "vivi-console";
 let CURRENT_POST = null;
 let unlocked = false;
 
-function esc(s){
-  return (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-}
-function fmtDate(iso){
-  const d = new Date(iso);
-  return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
-}
+function esc(s){ return (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmtDate(iso){ const d = new Date(iso); return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
 
-async function sget(key, shared){
-  try{ const r = await window.storage.get(key, !!shared); return r ? JSON.parse(r.value) : null; }
-  catch(e){ return null; }
-}
-async function sset(key, val, shared){
-  try{ await window.storage.set(key, JSON.stringify(val), !!shared); return true; }
-  catch(e){ return false; }
-}
+/* localStorage for this-browser-only state (which post you liked, which topic you voted) */
+function lget(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function lset(key,val){ try{ if(val===null) localStorage.removeItem(key); else localStorage.setItem(key,val); }catch(e){} }
 
+/* ---------- SEED DEFAULTS IF EMPTY ---------- */
 async function ensureSeed(){
-  let posts = await sget('posts', true);
-  if(!posts){
-    posts = [{
-      id: 'p'+Date.now(),
-      title: 'first entry',
-      body: "i don't really know who reads this, if anyone.\n\nbut i needed somewhere to put things down that isn't a group chat or a notes app that gets deleted the next time i clear my phone.\n\nso. here it is. vivi's corner of the internet.",
-      date: new Date().toISOString(),
-      tags: []
-    }];
-    await sset('posts', posts, true);
+  const {data: posts} = await sb.from('posts').select('*');
+  if(!posts || posts.length===0){
+    await sb.from('posts').insert({
+      title:'first entry',
+      body:"i don't really know who reads this, if anyone.\n\nbut i needed somewhere to put things down that isn't a group chat or a notes app that gets deleted the next time i clear my phone.\n\nso. here it is. vivi's corner of the internet."
+    });
   }
-  let topics = await sget('topics', true);
-  if(!topics){
-    topics = [
-      {id:'t1', text:'why silence feels different depending on who is in the room', votes:0},
-      {id:'t2', text:'a rant about people who reply "k"', votes:0},
-      {id:'t3', text:'things i would say if i were braver', votes:0}
-    ];
-    await sset('topics', topics, true);
+  const {data: topics} = await sb.from('topics').select('*');
+  if(!topics || topics.length===0){
+    await sb.from('topics').insert([
+      {text:'why silence feels different depending on who is in the room', votes:0},
+      {text:'a rant about people who reply "k"', votes:0},
+      {text:'things i would say if i were braver', votes:0}
+    ]);
   }
-  let about = await sget('about', true);
-  if(about === null){
-    about = "vivi isn't my real name, and that's the point.\n\nthis is a place to post the things that don't fit anywhere else — rants, half-finished thoughts, stuff i'd delete before sending to an actual person. no last name, no face, just whatever's on my mind that day.\n\nvote on what i should write about next, or don't. i'll probably write it anyway.";
-    await sset('about', about, true);
+  const {data: about} = await sb.from('settings').select('*').eq('key','about').maybeSingle();
+  if(!about){
+    await sb.from('settings').insert({
+      key:'about',
+      value:"vivi isn't my real name, and that's the point.\n\nthis is a place to post the things that don't fit anywhere else — rants, half-finished thoughts, stuff i'd delete before sending to an actual person. no last name, no face, just whatever's on my mind that day.\n\nvote on what i should write about next, or don't. i'll probably write it anyway."
+    });
   }
-  return posts;
 }
 
+/* ---------- NAV ---------- */
 function switchTab(tab){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -302,7 +228,6 @@ function switchTab(tab){
   const btn = document.querySelector('.tab[data-tab="'+tab+'"]');
   if(btn) btn.classList.add('active');
 }
-
 document.querySelectorAll('.tab').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     switchTab(btn.dataset.tab);
@@ -313,12 +238,13 @@ document.querySelectorAll('.tab').forEach(btn=>{
   });
 });
 
-function postCard(p, idx){
+/* ---------- POSTS ---------- */
+function postCard(p){
   const snippet = p.body.length > 140 ? p.body.slice(0,140).trim()+'…' : p.body;
   const div = document.createElement('div');
   div.className='post-card';
   div.innerHTML = `
-    <span class="corner">${fmtDate(p.date)}</span>
+    <span class="corner">${fmtDate(p.created_at)}</span>
     <h3>${esc(p.title)}</h3>
     <p class="snippet">${esc(snippet)}</p>
   `;
@@ -327,44 +253,43 @@ function postCard(p, idx){
 }
 
 async function renderRecent(){
-  const posts = (await sget('posts', true)) || [];
-  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
   const list = document.getElementById('recentList');
+  const {data, error} = await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(5);
   list.innerHTML='';
-  if(!posts.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
-  posts.slice(0,5).forEach((p,i)=> list.appendChild(postCard(p,i)));
+  if(error){ list.innerHTML='<p class="empty">couldn\'t load entries right now.</p>'; return; }
+  if(!data.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
+  data.forEach(p=> list.appendChild(postCard(p)));
 }
 
 async function renderAll(){
-  const posts = (await sget('posts', true)) || [];
-  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
   const list = document.getElementById('allList');
+  const {data, error} = await sb.from('posts').select('*').order('created_at',{ascending:false});
   list.innerHTML='';
-  if(!posts.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
-  posts.forEach((p,i)=> list.appendChild(postCard(p,i)));
+  if(error){ list.innerHTML='<p class="empty">couldn\'t load entries right now.</p>'; return; }
+  if(!data.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
+  data.forEach(p=> list.appendChild(postCard(p)));
 }
 
 async function openArticle(id){
-  const posts = (await sget('posts', true)) || [];
-  const p = posts.find(x=>x.id===id);
+  const {data: p} = await sb.from('posts').select('*').eq('id', id).maybeSingle();
   if(!p) return;
   CURRENT_POST = p;
   switchTab('article');
   await renderArticle(p);
 }
-document.getElementById('backBtn').addEventListener('click', ()=>{
-  switchTab('recent'); renderRecent();
-});
+document.getElementById('backBtn').addEventListener('click', ()=>{ switchTab('recent'); renderRecent(); });
 
 async function renderArticle(p){
   const box = document.getElementById('articleDetail');
-  const reactions = (await sget('reactions:'+p.id, true)) || {likes:0, dislikes:0};
-  const myReact = (await sget('myreact:'+p.id, false));
-  const comments = (await sget('comments:'+p.id, true)) || [];
+  const {data: reactionRow} = await sb.from('reactions').select('*').eq('post_id', p.id).maybeSingle();
+  const reactions = reactionRow || {likes:0, dislikes:0};
+  const myReact = lget('myreact:'+p.id);
+  const {data: comments} = await sb.from('comments').select('*').eq('post_id', p.id).order('created_at',{ascending:true});
+  const commentList = comments || [];
 
   box.innerHTML = `
     <h3>${esc(p.title)}</h3>
-    <div class="article-meta">${fmtDate(p.date)}</div>
+    <div class="article-meta">${fmtDate(p.created_at)}</div>
     <div class="article-body">${esc(p.body)}</div>
     <div class="reaction-bar">
       <button class="rbtn like ${myReact==='like'?'on':''}" id="likeBtn">&#9650; like <span id="likeCount">${reactions.likes}</span></button>
@@ -372,7 +297,7 @@ async function renderArticle(p){
       <button class="rbtn share" id="shareBtn">share</button>
     </div>
     <div class="comments">
-      <h4>${comments.length} comment${comments.length===1?'':'s'}</h4>
+      <h4>${commentList.length} comment${commentList.length===1?'':'s'}</h4>
       <div id="commentList"></div>
       <div class="comment-form">
         <input type="text" id="commentInput" placeholder="say something..." maxlength="500">
@@ -381,12 +306,12 @@ async function renderArticle(p){
     </div>
   `;
   const cl = box.querySelector('#commentList');
-  if(!comments.length){ cl.innerHTML = '<p class="empty">no comments yet. be the first.</p>'; }
+  if(!commentList.length){ cl.innerHTML = '<p class="empty">no comments yet. be the first.</p>'; }
   else{
-    comments.slice().reverse().forEach(c=>{
+    commentList.slice().reverse().forEach(c=>{
       const d = document.createElement('div');
       d.className='comment';
-      d.innerHTML = `<div class="cmeta">${fmtDate(c.date)}</div>${esc(c.text)}`;
+      d.innerHTML = `<div class="cmeta">${fmtDate(c.created_at)}</div>${esc(c.text)}`;
       cl.appendChild(d);
     });
   }
@@ -395,23 +320,27 @@ async function renderArticle(p){
   box.querySelector('#dislikeBtn').addEventListener('click', ()=>react(p.id,'dislike'));
   box.querySelector('#shareBtn').addEventListener('click', ()=>shareArticle(p));
   box.querySelector('#commentSend').addEventListener('click', ()=>sendComment(p.id));
-  box.querySelector('#commentInput').addEventListener('keydown', e=>{
-    if(e.key==='Enter') sendComment(p.id);
-  });
+  box.querySelector('#commentInput').addEventListener('keydown', e=>{ if(e.key==='Enter') sendComment(p.id); });
 }
 
 async function react(postId, kind){
-  const reactions = (await sget('reactions:'+postId, true)) || {likes:0, dislikes:0};
-  const my = (await sget('myreact:'+postId, false));
+  const {data: row} = await sb.from('reactions').select('*').eq('post_id', postId).maybeSingle();
+  let likes = row ? row.likes : 0;
+  let dislikes = row ? row.dislikes : 0;
+  const my = lget('myreact:'+postId);
+
   if(my===kind){
-    reactions[kind==='like'?'likes':'dislikes'] = Math.max(0, reactions[kind==='like'?'likes':'dislikes']-1);
-    await sset('myreact:'+postId, null, false);
+    if(kind==='like') likes = Math.max(0, likes-1); else dislikes = Math.max(0, dislikes-1);
+    lset('myreact:'+postId, null);
   } else {
-    if(my){ reactions[my==='like'?'likes':'dislikes'] = Math.max(0, reactions[my==='like'?'likes':'dislikes']-1); }
-    reactions[kind==='like'?'likes':'dislikes'] += 1;
-    await sset('myreact:'+postId, kind, false);
+    if(my==='like') likes = Math.max(0, likes-1);
+    if(my==='dislike') dislikes = Math.max(0, dislikes-1);
+    if(kind==='like') likes += 1; else dislikes += 1;
+    lset('myreact:'+postId, kind);
   }
-  await sset('reactions:'+postId, reactions, true);
+
+  if(row){ await sb.from('reactions').update({likes, dislikes}).eq('post_id', postId); }
+  else{ await sb.from('reactions').insert({post_id: postId, likes, dislikes}); }
   renderArticle(CURRENT_POST);
 }
 
@@ -419,9 +348,7 @@ async function sendComment(postId){
   const input = document.getElementById('commentInput');
   const text = input.value.trim();
   if(!text) return;
-  const comments = (await sget('comments:'+postId, true)) || [];
-  comments.push({id:'c'+Date.now(), text, date:new Date().toISOString()});
-  await sset('comments:'+postId, comments, true);
+  await sb.from('comments').insert({post_id: postId, text});
   input.value='';
   renderArticle(CURRENT_POST);
 }
@@ -431,20 +358,19 @@ function shareArticle(p){
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(()=>{
       const btn = document.getElementById('shareBtn');
-      const old = btn.textContent;
       btn.textContent = 'copied';
       setTimeout(()=>btn.textContent='share', 1400);
     }).catch(()=>{});
   }
 }
 
+/* ---------- TOPICS / VOTING ---------- */
 async function renderTopics(){
-  const topics = (await sget('topics', true)) || [];
-  const myVote = (await sget('myvote', false));
-  topics.sort((a,b)=> b.votes-a.votes);
   const list = document.getElementById('topicList');
+  const {data: topics, error} = await sb.from('topics').select('*').order('votes',{ascending:false});
+  const myVote = lget('myvote');
   list.innerHTML='';
-  if(!topics.length){ list.innerHTML='<p class="empty">no topics up for a vote right now.</p>'; return; }
+  if(error || !topics || !topics.length){ list.innerHTML='<p class="empty">no topics up for a vote right now.</p>'; return; }
   topics.forEach((t,i)=>{
     const row = document.createElement('div');
     row.className='topic-row';
@@ -452,7 +378,7 @@ async function renderTopics(){
       <span class="rank">${i+1}</span>
       <span class="ttext">${esc(t.text)}</span>
       <span class="count">${t.votes} vote${t.votes===1?'':'s'}</span>
-      <button class="vote-btn ${myVote===t.id?'on':''}">${myVote===t.id?'voted':'vote'}</button>
+      <button class="vote-btn ${myVote===String(t.id)?'on':''}">${myVote===String(t.id)?'voted':'vote'}</button>
     `;
     row.querySelector('.vote-btn').addEventListener('click', ()=>castVote(t.id));
     list.appendChild(row);
@@ -460,35 +386,34 @@ async function renderTopics(){
 }
 
 async function castVote(topicId){
-  const topics = (await sget('topics', true)) || [];
-  const myVote = (await sget('myvote', false));
-  if(myVote === topicId){
-    const t = topics.find(x=>x.id===topicId);
-    if(t) t.votes = Math.max(0, t.votes-1);
-    await sset('myvote', null, false);
+  const {data: topics} = await sb.from('topics').select('*');
+  const myVote = lget('myvote');
+  const idStr = String(topicId);
+
+  if(myVote === idStr){
+    const t = topics.find(x=>String(x.id)===idStr);
+    if(t) await sb.from('topics').update({votes: Math.max(0, t.votes-1)}).eq('id', topicId);
+    lset('myvote', null);
   } else {
     if(myVote){
-      const old = topics.find(x=>x.id===myVote);
-      if(old) old.votes = Math.max(0, old.votes-1);
+      const old = topics.find(x=>String(x.id)===myVote);
+      if(old) await sb.from('topics').update({votes: Math.max(0, old.votes-1)}).eq('id', old.id);
     }
-    const t = topics.find(x=>x.id===topicId);
-    if(t) t.votes += 1;
-    await sset('myvote', topicId, false);
+    const t = topics.find(x=>String(x.id)===idStr);
+    if(t) await sb.from('topics').update({votes: t.votes+1}).eq('id', topicId);
+    lset('myvote', idStr);
   }
-  await sset('topics', topics, true);
   renderTopics();
 }
 
+/* ---------- ABOUT ---------- */
 async function renderAbout(){
-  const about = (await sget('about', true)) || '';
-  document.getElementById('aboutBox').textContent = about;
+  const {data} = await sb.from('settings').select('*').eq('key','about').maybeSingle();
+  document.getElementById('aboutBox').textContent = data ? data.value : '';
 }
 
 /* ---------- ADMIN ---------- */
-document.getElementById('adminOpen').addEventListener('click', ()=>{
-  switchTab('admin');
-  renderAdmin();
-});
+document.getElementById('adminOpen').addEventListener('click', ()=>{ switchTab('admin'); renderAdmin(); });
 
 function renderAdmin(){
   const area = document.getElementById('adminArea');
@@ -499,7 +424,7 @@ function renderAdmin(){
         <input type="password" id="passInput" placeholder="passcode">
         <button class="btn">unlock</button>
         <div class="msg err" id="lockMsg"></div>
-        <div class="note">client-side lock only — fine for a private prototype, not real security once this is hosted publicly.</div>
+        <div class="note">client-side lock only — fine for now, but not real security. this is the piece we'll swap for a real login next.</div>
       </div>
     `;
     area.querySelector('button').addEventListener('click', ()=>{
@@ -538,7 +463,9 @@ function renderAdmin(){
     </div>
   `;
   loadManageList();
-  sget('about', true).then(a=>{ document.getElementById('aboutEdit').value = a || ''; });
+  sb.from('settings').select('*').eq('key','about').maybeSingle().then(({data})=>{
+    document.getElementById('aboutEdit').value = data ? data.value : '';
+  });
 
   document.getElementById('publishBtn').addEventListener('click', publishPost);
   document.getElementById('addTopicBtn').addEventListener('click', addTopic);
@@ -546,15 +473,14 @@ function renderAdmin(){
 }
 
 async function loadManageList(){
-  const posts = (await sget('posts', true)) || [];
-  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  const {data: posts} = await sb.from('posts').select('*').order('created_at',{ascending:false});
   const list = document.getElementById('manageList');
   if(!list) return;
-  list.innerHTML = posts.length ? '' : '<p class="empty">no entries yet.</p>';
-  posts.forEach(p=>{
+  list.innerHTML = (posts && posts.length) ? '' : '<p class="empty">no entries yet.</p>';
+  (posts||[]).forEach(p=>{
     const row = document.createElement('div');
     row.className='manage-row';
-    row.innerHTML = `<span>${esc(p.title)} <span style="color:var(--muted)">— ${fmtDate(p.date)}</span></span><button>delete</button>`;
+    row.innerHTML = `<span>${esc(p.title)} <span style="color:var(--muted)">— ${fmtDate(p.created_at)}</span></span><button>delete</button>`;
     row.querySelector('button').addEventListener('click', ()=>deletePost(p.id));
     list.appendChild(row);
   });
@@ -565,12 +491,10 @@ async function publishPost(){
   const body = document.getElementById('newBody').value.trim();
   const msg = document.getElementById('publishMsg');
   if(!title || !body){ msg.className='msg err'; msg.textContent='needs a title and some text.'; return; }
-  const posts = (await sget('posts', true)) || [];
-  posts.push({id:'p'+Date.now(), title, body, date:new Date().toISOString(), tags:[]});
-  const ok = await sset('posts', posts, true);
-  msg.className = ok ? 'msg ok' : 'msg err';
-  msg.textContent = ok ? 'published.' : 'something went wrong saving that.';
-  if(ok){
+  const {error} = await sb.from('posts').insert({title, body});
+  msg.className = error ? 'msg err' : 'msg ok';
+  msg.textContent = error ? 'something went wrong saving that.' : 'published.';
+  if(!error){
     document.getElementById('newTitle').value='';
     document.getElementById('newBody').value='';
     loadManageList();
@@ -578,9 +502,9 @@ async function publishPost(){
 }
 
 async function deletePost(id){
-  let posts = (await sget('posts', true)) || [];
-  posts = posts.filter(p=>p.id!==id);
-  await sset('posts', posts, true);
+  await sb.from('comments').delete().eq('post_id', id);
+  await sb.from('reactions').delete().eq('post_id', id);
+  await sb.from('posts').delete().eq('id', id);
   loadManageList();
 }
 
@@ -588,19 +512,20 @@ async function addTopic(){
   const text = document.getElementById('newTopic').value.trim();
   const msg = document.getElementById('topicMsg');
   if(!text){ msg.className='msg err'; msg.textContent='write a topic first.'; return; }
-  const topics = (await sget('topics', true)) || [];
-  topics.push({id:'t'+Date.now(), text, votes:0});
-  await sset('topics', topics, true);
+  await sb.from('topics').insert({text, votes:0});
   document.getElementById('newTopic').value='';
   msg.className='msg ok'; msg.textContent='added.';
 }
 
 async function saveAbout(){
   const val = document.getElementById('aboutEdit').value;
-  const ok = await sset('about', val, true);
+  const {data: existing} = await sb.from('settings').select('*').eq('key','about').maybeSingle();
+  let error;
+  if(existing){ ({error} = await sb.from('settings').update({value: val}).eq('key','about')); }
+  else{ ({error} = await sb.from('settings').insert({key:'about', value: val})); }
   const msg = document.getElementById('aboutMsg');
-  msg.className = ok?'msg ok':'msg err';
-  msg.textContent = ok ? 'saved.' : 'something went wrong saving that.';
+  msg.className = error ? 'msg err' : 'msg ok';
+  msg.textContent = error ? 'something went wrong saving that.' : 'saved.';
 }
 
 /* ---------- INIT ---------- */
