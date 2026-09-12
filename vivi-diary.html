@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>vivi — i am here</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#0a0a0a;
+  --panel:#131313;
+  --panel-2:#1a1a1a;
+  --border:#282828;
+  --red:#e0201a;
+  --red-glow:rgba(224,32,26,.35);
+  --green:#2ecc71;
+  --green-glow:rgba(46,204,113,.35);
+  --gold:#ffcf4d;
+  --text:#ececec;
+  --muted:#8f8f8f;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;}
+body{min-height:100vh;}
+::selection{background:var(--red);color:#fff;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+textarea,input{font-family:inherit;}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 80px;}
+
+/* ---------- HERO ---------- */
+.hero{
+  padding:56px 20px 40px;
+  text-align:center;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(224,32,26,.08), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(46,204,113,.06), transparent 60%);
+}
+.logo-ring{
+  width:74px;height:74px;margin:0 auto 18px;
+  position:relative;
+}
+.logo-ring svg{width:100%;height:100%;display:block;}
+.logo-ring .pulse{
+  position:absolute;inset:-10px;border-radius:50%;
+  border:1px solid var(--red);
+  opacity:0;
+  animation:pulse 3.2s ease-out infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(.82);opacity:.55;}
+  70%{transform:scale(1.35);opacity:0;}
+  100%{opacity:0;}
+}
+.hero h1{
+  font-family:'Permanent Marker',cursive;
+  font-weight:400;
+  font-size:clamp(1.5rem,4.4vw,2.4rem);
+  line-height:1.35;
+  margin:0 0 6px;
+  color:#f4f4f4;
+}
+.hero .byline{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem;
+  color:var(--muted);
+  letter-spacing:.02em;
+}
+.hero .byline b{color:var(--green);font-weight:500;}
+
+/* ---------- NAV ---------- */
+nav{
+  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:rgba(10,10,10,.92);backdrop-filter:blur(6px);
+  z-index:10;
+}
+.tab{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:8px 16px;
+  font-size:.85rem;
+  clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px);
+  transition:color .15s, border-color .15s;
+}
+.tab:hover{color:var(--text);border-color:var(--green);}
+.tab.active{color:#fff;border-color:var(--red);box-shadow:0 0 0 1px var(--red-glow) inset;}
+.admin-btn{
+  margin-left:auto;background:none;border:1px solid var(--border);color:var(--muted);
+  width:34px;height:34px;border-radius:50%;font-size:.9rem;
+}
+.admin-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+main{padding-top:28px;}
+.section{display:none;}
+.section.active{display:block;}
+
+h2.section-title{
+  font-family:'Permanent Marker',cursive;font-weight:400;
+  font-size:1.3rem;margin:0 0 18px;color:#f0f0f0;
+}
+
+/* ---------- POST CARD ---------- */
+.post-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-left:3px solid var(--green);
+  padding:16px 18px;margin-bottom:14px;position:relative;
+  transition:border-color .15s, transform .15s;
+}
+.post-card:hover{border-left-color:var(--red);transform:translateX(2px);}
+.post-card .corner{
+  position:absolute;top:6px;right:8px;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);
+}
+.post-card h3{
+  margin:0 0 6px;font-size:1.05rem;font-weight:600;cursor:pointer;
+}
+.post-card h3:hover{color:var(--green);}
+.post-card p.snippet{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5;}
+.empty{color:var(--muted);font-size:.9rem;font-style:italic;padding:20px 0;}
+
+/* ---------- ARTICLE DETAIL ---------- */
+.article-detail{background:var(--panel);border:1px solid var(--border);padding:22px 22px 10px;}
+.back-link{background:none;border:none;color:var(--muted);font-size:.82rem;margin-bottom:14px;padding:0;}
+.back-link:hover{color:var(--green);}
+.article-detail h3{font-size:1.35rem;margin:0 0 4px;}
+.article-meta{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-bottom:16px;}
+.article-body{white-space:pre-wrap;line-height:1.7;font-size:.96rem;color:#dcdcdc;margin-bottom:20px;}
+
+.reaction-bar{display:flex;gap:10px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap;}
+.rbtn{
+  background:var(--panel-2);border:1px solid var(--border);color:var(--muted);
+  padding:7px 13px;font-size:.82rem;display:flex;align-items:center;gap:6px;
+}
+.rbtn:hover{color:var(--text);}
+.rbtn.like.on{color:var(--green);border-color:var(--green);}
+.rbtn.dislike.on{color:var(--red);border-color:var(--red);}
+.rbtn.share{margin-left:auto;}
+
+.comments h4{font-size:.95rem;color:var(--muted);font-weight:500;margin:0 0 10px;}
+.comment{border-bottom:1px solid var(--border);padding:10px 0;font-size:.88rem;}
+.comment .cmeta{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);margin-bottom:3px;}
+.comment-form{display:flex;gap:8px;margin-top:14px;}
+.comment-form input{flex:1;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:9px 12px;font-size:.86rem;}
+.comment-form input:focus{outline:none;border-color:var(--green);}
+.btn{background:var(--panel-2);border:1px solid var(--green);color:var(--green);padding:9px 16px;font-size:.85rem;}
+.btn:hover{background:var(--green);color:#0a0a0a;}
+.btn.red{border-color:var(--red);color:var(--red);}
+.btn.red:hover{background:var(--red);color:#fff;}
+
+/* ---------- VOTE ---------- */
+.topic-row{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);padding:12px 16px;margin-bottom:10px;}
+.topic-row .rank{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.8rem;width:20px;}
+.topic-row .ttext{flex:1;font-size:.92rem;}
+.topic-row .count{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted);}
+.vote-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;font-size:.78rem;}
+.vote-btn.on{color:var(--red);border-color:var(--red);}
+.vote-btn:hover{color:var(--green);border-color:var(--green);}
+
+/* ---------- ABOUT ---------- */
+.about-box{background:var(--panel);border:1px solid var(--border);padding:20px;white-space:pre-wrap;line-height:1.7;font-size:.94rem;color:#dcdcdc;}
+
+/* ---------- ADMIN ---------- */
+.admin-lock{max-width:320px;margin:60px auto;text-align:center;}
+.admin-lock input{width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:10px 12px;margin:12px 0;font-size:.9rem;}
+.admin-panel label{display:block;font-size:.78rem;color:var(--muted);margin:14px 0 5px;font-family:'JetBrains Mono',monospace;}
+.admin-panel input[type=text], .admin-panel textarea{
+  width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);padding:10px 12px;font-size:.9rem;
+}
+.admin-panel textarea{min-height:120px;resize:vertical;font-family:'Inter',sans-serif;}
+.admin-block{background:var(--panel);border:1px solid var(--border);padding:18px;margin-bottom:20px;}
+.admin-block h4{margin:0 0 4px;font-size:.95rem;color:var(--gold);}
+.manage-row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding:8px 0;font-size:.85rem;}
+.manage-row button{background:none;border:none;color:var(--red);font-size:.78rem;}
+.note{font-size:.75rem;color:var(--muted);margin-top:6px;}
+.msg{font-size:.82rem;margin-top:8px;}
+.msg.ok{color:var(--green);}
+.msg.err{color:var(--red);}
+
+footer{text-align:center;padding:30px 20px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.7rem;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo-ring">
+    <div class="pulse"></div>
+    <svg viewBox="0 0 74 74">
+      <path d="M37 3 A34 34 0 0 1 37 71" fill="none" stroke="#e0201a" stroke-width="4"/>
+      <path d="M37 71 A34 34 0 0 1 37 3" fill="none" stroke="#2ecc71" stroke-width="4"/>
+      <circle cx="37" cy="37" r="25" fill="#131313" stroke="#282828" stroke-width="1"/>
+      <text x="37" y="46" text-anchor="middle" font-family="Permanent Marker" font-size="26" fill="#f0f0f0">v</text>
+    </svg>
+  </div>
+  <h1>i am here...<br>because i have nowhere else to be</h1>
+  <div class="byline">a diary kept by <b>vivi</b></div>
+</div>
+
+<nav>
+  <button class="tab active" data-tab="recent">recent additions</button>
+  <button class="tab" data-tab="all">all uploads</button>
+  <button class="tab" data-tab="vote">next topic voting</button>
+  <button class="tab" data-tab="about">about</button>
+  <button class="admin-btn" id="adminOpen" title="console">&#9881;</button>
+</nav>
+
+<main class="wrap">
+
+  <section class="section active" id="sec-recent">
+    <h2 class="section-title">recent additions</h2>
+    <div id="recentList"></div>
+  </section>
+
+  <section class="section" id="sec-all">
+    <h2 class="section-title">all uploads</h2>
+    <div id="allList"></div>
+  </section>
+
+  <section class="section" id="sec-article">
+    <button class="back-link" id="backBtn">&larr; back</button>
+    <div class="article-detail" id="articleDetail"></div>
+  </section>
+
+  <section class="section" id="sec-vote">
+    <h2 class="section-title">next topic voting</h2>
+    <div id="topicList"></div>
+  </section>
+
+  <section class="section" id="sec-about">
+    <h2 class="section-title">about</h2>
+    <div class="about-box" id="aboutBox"></div>
+  </section>
+
+  <section class="section" id="sec-admin">
+    <div id="adminArea"></div>
+  </section>
+
+</main>
+
+<footer>vivi's diary — everything here is fiction until it isn't</footer>
+
+<script>
+const ADMIN_CODE = "vivi-console";
+let CURRENT_POST = null;
+let unlocked = false;
+
+function esc(s){
+  return (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+function fmtDate(iso){
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+}
+
+async function sget(key, shared){
+  try{ const r = await window.storage.get(key, !!shared); return r ? JSON.parse(r.value) : null; }
+  catch(e){ return null; }
+}
+async function sset(key, val, shared){
+  try{ await window.storage.set(key, JSON.stringify(val), !!shared); return true; }
+  catch(e){ return false; }
+}
+
+async function ensureSeed(){
+  let posts = await sget('posts', true);
+  if(!posts){
+    posts = [{
+      id: 'p'+Date.now(),
+      title: 'first entry',
+      body: "i don't really know who reads this, if anyone.\n\nbut i needed somewhere to put things down that isn't a group chat or a notes app that gets deleted the next time i clear my phone.\n\nso. here it is. vivi's corner of the internet.",
+      date: new Date().toISOString(),
+      tags: []
+    }];
+    await sset('posts', posts, true);
+  }
+  let topics = await sget('topics', true);
+  if(!topics){
+    topics = [
+      {id:'t1', text:'why silence feels different depending on who is in the room', votes:0},
+      {id:'t2', text:'a rant about people who reply "k"', votes:0},
+      {id:'t3', text:'things i would say if i were braver', votes:0}
+    ];
+    await sset('topics', topics, true);
+  }
+  let about = await sget('about', true);
+  if(about === null){
+    about = "vivi isn't my real name, and that's the point.\n\nthis is a place to post the things that don't fit anywhere else — rants, half-finished thoughts, stuff i'd delete before sending to an actual person. no last name, no face, just whatever's on my mind that day.\n\nvote on what i should write about next, or don't. i'll probably write it anyway.";
+    await sset('about', about, true);
+  }
+  return posts;
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const sec = document.getElementById('sec-'+tab);
+  if(sec) sec.classList.add('active');
+  const btn = document.querySelector('.tab[data-tab="'+tab+'"]');
+  if(btn) btn.classList.add('active');
+}
+
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    switchTab(btn.dataset.tab);
+    if(btn.dataset.tab==='recent') renderRecent();
+    if(btn.dataset.tab==='all') renderAll();
+    if(btn.dataset.tab==='vote') renderTopics();
+    if(btn.dataset.tab==='about') renderAbout();
+  });
+});
+
+function postCard(p, idx){
+  const snippet = p.body.length > 140 ? p.body.slice(0,140).trim()+'…' : p.body;
+  const div = document.createElement('div');
+  div.className='post-card';
+  div.innerHTML = `
+    <span class="corner">${fmtDate(p.date)}</span>
+    <h3>${esc(p.title)}</h3>
+    <p class="snippet">${esc(snippet)}</p>
+  `;
+  div.querySelector('h3').addEventListener('click', ()=>openArticle(p.id));
+  return div;
+}
+
+async function renderRecent(){
+  const posts = (await sget('posts', true)) || [];
+  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  const list = document.getElementById('recentList');
+  list.innerHTML='';
+  if(!posts.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
+  posts.slice(0,5).forEach((p,i)=> list.appendChild(postCard(p,i)));
+}
+
+async function renderAll(){
+  const posts = (await sget('posts', true)) || [];
+  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  const list = document.getElementById('allList');
+  list.innerHTML='';
+  if(!posts.length){ list.innerHTML='<p class="empty">nothing posted yet.</p>'; return; }
+  posts.forEach((p,i)=> list.appendChild(postCard(p,i)));
+}
+
+async function openArticle(id){
+  const posts = (await sget('posts', true)) || [];
+  const p = posts.find(x=>x.id===id);
+  if(!p) return;
+  CURRENT_POST = p;
+  switchTab('article');
+  await renderArticle(p);
+}
+document.getElementById('backBtn').addEventListener('click', ()=>{
+  switchTab('recent'); renderRecent();
+});
+
+async function renderArticle(p){
+  const box = document.getElementById('articleDetail');
+  const reactions = (await sget('reactions:'+p.id, true)) || {likes:0, dislikes:0};
+  const myReact = (await sget('myreact:'+p.id, false));
+  const comments = (await sget('comments:'+p.id, true)) || [];
+
+  box.innerHTML = `
+    <h3>${esc(p.title)}</h3>
+    <div class="article-meta">${fmtDate(p.date)}</div>
+    <div class="article-body">${esc(p.body)}</div>
+    <div class="reaction-bar">
+      <button class="rbtn like ${myReact==='like'?'on':''}" id="likeBtn">&#9650; like <span id="likeCount">${reactions.likes}</span></button>
+      <button class="rbtn dislike ${myReact==='dislike'?'on':''}" id="dislikeBtn">&#9660; dislike <span id="dislikeCount">${reactions.dislikes}</span></button>
+      <button class="rbtn share" id="shareBtn">share</button>
+    </div>
+    <div class="comments">
+      <h4>${comments.length} comment${comments.length===1?'':'s'}</h4>
+      <div id="commentList"></div>
+      <div class="comment-form">
+        <input type="text" id="commentInput" placeholder="say something..." maxlength="500">
+        <button class="btn" id="commentSend">post</button>
+      </div>
+    </div>
+  `;
+  const cl = box.querySelector('#commentList');
+  if(!comments.length){ cl.innerHTML = '<p class="empty">no comments yet. be the first.</p>'; }
+  else{
+    comments.slice().reverse().forEach(c=>{
+      const d = document.createElement('div');
+      d.className='comment';
+      d.innerHTML = `<div class="cmeta">${fmtDate(c.date)}</div>${esc(c.text)}`;
+      cl.appendChild(d);
+    });
+  }
+
+  box.querySelector('#likeBtn').addEventListener('click', ()=>react(p.id,'like'));
+  box.querySelector('#dislikeBtn').addEventListener('click', ()=>react(p.id,'dislike'));
+  box.querySelector('#shareBtn').addEventListener('click', ()=>shareArticle(p));
+  box.querySelector('#commentSend').addEventListener('click', ()=>sendComment(p.id));
+  box.querySelector('#commentInput').addEventListener('keydown', e=>{
+    if(e.key==='Enter') sendComment(p.id);
+  });
+}
+
+async function react(postId, kind){
+  const reactions = (await sget('reactions:'+postId, true)) || {likes:0, dislikes:0};
+  const my = (await sget('myreact:'+postId, false));
+  if(my===kind){
+    reactions[kind==='like'?'likes':'dislikes'] = Math.max(0, reactions[kind==='like'?'likes':'dislikes']-1);
+    await sset('myreact:'+postId, null, false);
+  } else {
+    if(my){ reactions[my==='like'?'likes':'dislikes'] = Math.max(0, reactions[my==='like'?'likes':'dislikes']-1); }
+    reactions[kind==='like'?'likes':'dislikes'] += 1;
+    await sset('myreact:'+postId, kind, false);
+  }
+  await sset('reactions:'+postId, reactions, true);
+  renderArticle(CURRENT_POST);
+}
+
+async function sendComment(postId){
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const comments = (await sget('comments:'+postId, true)) || [];
+  comments.push({id:'c'+Date.now(), text, date:new Date().toISOString()});
+  await sset('comments:'+postId, comments, true);
+  input.value='';
+  renderArticle(CURRENT_POST);
+}
+
+function shareArticle(p){
+  const text = `"${p.title}" — from vivi's diary:\n\n${p.body.slice(0,200)}${p.body.length>200?'…':''}`;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn = document.getElementById('shareBtn');
+      const old = btn.textContent;
+      btn.textContent = 'copied';
+      setTimeout(()=>btn.textContent='share', 1400);
+    }).catch(()=>{});
+  }
+}
+
+async function renderTopics(){
+  const topics = (await sget('topics', true)) || [];
+  const myVote = (await sget('myvote', false));
+  topics.sort((a,b)=> b.votes-a.votes);
+  const list = document.getElementById('topicList');
+  list.innerHTML='';
+  if(!topics.length){ list.innerHTML='<p class="empty">no topics up for a vote right now.</p>'; return; }
+  topics.forEach((t,i)=>{
+    const row = document.createElement('div');
+    row.className='topic-row';
+    row.innerHTML = `
+      <span class="rank">${i+1}</span>
+      <span class="ttext">${esc(t.text)}</span>
+      <span class="count">${t.votes} vote${t.votes===1?'':'s'}</span>
+      <button class="vote-btn ${myVote===t.id?'on':''}">${myVote===t.id?'voted':'vote'}</button>
+    `;
+    row.querySelector('.vote-btn').addEventListener('click', ()=>castVote(t.id));
+    list.appendChild(row);
+  });
+}
+
+async function castVote(topicId){
+  const topics = (await sget('topics', true)) || [];
+  const myVote = (await sget('myvote', false));
+  if(myVote === topicId){
+    const t = topics.find(x=>x.id===topicId);
+    if(t) t.votes = Math.max(0, t.votes-1);
+    await sset('myvote', null, false);
+  } else {
+    if(myVote){
+      const old = topics.find(x=>x.id===myVote);
+      if(old) old.votes = Math.max(0, old.votes-1);
+    }
+    const t = topics.find(x=>x.id===topicId);
+    if(t) t.votes += 1;
+    await sset('myvote', topicId, false);
+  }
+  await sset('topics', topics, true);
+  renderTopics();
+}
+
+async function renderAbout(){
+  const about = (await sget('about', true)) || '';
+  document.getElementById('aboutBox').textContent = about;
+}
+
+/* ---------- ADMIN ---------- */
+document.getElementById('adminOpen').addEventListener('click', ()=>{
+  switchTab('admin');
+  renderAdmin();
+});
+
+function renderAdmin(){
+  const area = document.getElementById('adminArea');
+  if(!unlocked){
+    area.innerHTML = `
+      <div class="admin-lock">
+        <h2 class="section-title">console</h2>
+        <input type="password" id="passInput" placeholder="passcode">
+        <button class="btn">unlock</button>
+        <div class="msg err" id="lockMsg"></div>
+        <div class="note">client-side lock only — fine for a private prototype, not real security once this is hosted publicly.</div>
+      </div>
+    `;
+    area.querySelector('button').addEventListener('click', ()=>{
+      const val = document.getElementById('passInput').value;
+      if(val === ADMIN_CODE){ unlocked = true; renderAdmin(); }
+      else document.getElementById('lockMsg').textContent = 'wrong passcode.';
+    });
+    return;
+  }
+  area.innerHTML = `
+    <h2 class="section-title">console</h2>
+    <div class="admin-block">
+      <h4>new entry</h4>
+      <label>title</label>
+      <input type="text" id="newTitle">
+      <label>body</label>
+      <textarea id="newBody"></textarea>
+      <div style="margin-top:12px;"><button class="btn" id="publishBtn">publish</button></div>
+      <div class="msg" id="publishMsg"></div>
+    </div>
+    <div class="admin-block">
+      <h4>manage entries</h4>
+      <div id="manageList"></div>
+    </div>
+    <div class="admin-block">
+      <h4>add voting topic</h4>
+      <input type="text" id="newTopic" placeholder="a topic idea...">
+      <div style="margin-top:12px;"><button class="btn" id="addTopicBtn">add topic</button></div>
+      <div class="msg" id="topicMsg"></div>
+    </div>
+    <div class="admin-block">
+      <h4>edit about</h4>
+      <textarea id="aboutEdit" style="min-height:160px;"></textarea>
+      <div style="margin-top:12px;"><button class="btn" id="saveAboutBtn">save</button></div>
+      <div class="msg" id="aboutMsg"></div>
+    </div>
+  `;
+  loadManageList();
+  sget('about', true).then(a=>{ document.getElementById('aboutEdit').value = a || ''; });
+
+  document.getElementById('publishBtn').addEventListener('click', publishPost);
+  document.getElementById('addTopicBtn').addEventListener('click', addTopic);
+  document.getElementById('saveAboutBtn').addEventListener('click', saveAbout);
+}
+
+async function loadManageList(){
+  const posts = (await sget('posts', true)) || [];
+  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  const list = document.getElementById('manageList');
+  if(!list) return;
+  list.innerHTML = posts.length ? '' : '<p class="empty">no entries yet.</p>';
+  posts.forEach(p=>{
+    const row = document.createElement('div');
+    row.className='manage-row';
+    row.innerHTML = `<span>${esc(p.title)} <span style="color:var(--muted)">— ${fmtDate(p.date)}</span></span><button>delete</button>`;
+    row.querySelector('button').addEventListener('click', ()=>deletePost(p.id));
+    list.appendChild(row);
+  });
+}
+
+async function publishPost(){
+  const title = document.getElementById('newTitle').value.trim();
+  const body = document.getElementById('newBody').value.trim();
+  const msg = document.getElementById('publishMsg');
+  if(!title || !body){ msg.className='msg err'; msg.textContent='needs a title and some text.'; return; }
+  const posts = (await sget('posts', true)) || [];
+  posts.push({id:'p'+Date.now(), title, body, date:new Date().toISOString(), tags:[]});
+  const ok = await sset('posts', posts, true);
+  msg.className = ok ? 'msg ok' : 'msg err';
+  msg.textContent = ok ? 'published.' : 'something went wrong saving that.';
+  if(ok){
+    document.getElementById('newTitle').value='';
+    document.getElementById('newBody').value='';
+    loadManageList();
+  }
+}
+
+async function deletePost(id){
+  let posts = (await sget('posts', true)) || [];
+  posts = posts.filter(p=>p.id!==id);
+  await sset('posts', posts, true);
+  loadManageList();
+}
+
+async function addTopic(){
+  const text = document.getElementById('newTopic').value.trim();
+  const msg = document.getElementById('topicMsg');
+  if(!text){ msg.className='msg err'; msg.textContent='write a topic first.'; return; }
+  const topics = (await sget('topics', true)) || [];
+  topics.push({id:'t'+Date.now(), text, votes:0});
+  await sset('topics', topics, true);
+  document.getElementById('newTopic').value='';
+  msg.className='msg ok'; msg.textContent='added.';
+}
+
+async function saveAbout(){
+  const val = document.getElementById('aboutEdit').value;
+  const ok = await sset('about', val, true);
+  const msg = document.getElementById('aboutMsg');
+  msg.className = ok?'msg ok':'msg err';
+  msg.textContent = ok ? 'saved.' : 'something went wrong saving that.';
+}
+
+/* ---------- INIT ---------- */
+(async function init(){
+  await ensureSeed();
+  await renderRecent();
+})();
+</script>
+</body>
+</html>
