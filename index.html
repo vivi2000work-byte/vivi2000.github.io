@@ -182,9 +182,7 @@ const SUPA_URL = "https://bjuqhcugnwulxecvpmol.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqdXFoY3Vnbnd1bHhlY3ZwbW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxOTEyMjYsImV4cCI6MjEwNDc2NzIyNn0.puhr_xTIMlIk1-MsO0M7DW1zuAKshOrOWFCSr56wKLU";
 const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-const ADMIN_CODE = "vivi-console";
 let CURRENT_POST = null;
-let unlocked = false;
 
 function esc(s){ return (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function fmtDate(iso){ const d = new Date(iso); return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
@@ -415,27 +413,36 @@ async function renderAbout(){
 /* ---------- ADMIN ---------- */
 document.getElementById('adminOpen').addEventListener('click', ()=>{ switchTab('admin'); renderAdmin(); });
 
-function renderAdmin(){
+async function renderAdmin(){
   const area = document.getElementById('adminArea');
-  if(!unlocked){
+  const {data:{session}} = await sb.auth.getSession();
+
+  if(!session){
     area.innerHTML = `
       <div class="admin-lock">
         <h2 class="section-title">console</h2>
-        <input type="password" id="passInput" placeholder="passcode">
-        <button class="btn">unlock</button>
+        <input type="text" id="emailInput" placeholder="email" autocomplete="username">
+        <input type="password" id="passInput" placeholder="password" autocomplete="current-password">
+        <button class="btn">log in</button>
         <div class="msg err" id="lockMsg"></div>
-        <div class="note">client-side lock only — fine for now, but not real security. this is the piece we'll swap for a real login next.</div>
+        <div class="note">real login now — only the account you created in Supabase can get in.</div>
       </div>
     `;
-    area.querySelector('button').addEventListener('click', ()=>{
-      const val = document.getElementById('passInput').value;
-      if(val === ADMIN_CODE){ unlocked = true; renderAdmin(); }
-      else document.getElementById('lockMsg').textContent = 'wrong passcode.';
+    area.querySelector('button').addEventListener('click', async ()=>{
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passInput').value;
+      const msg = document.getElementById('lockMsg');
+      const {error} = await sb.auth.signInWithPassword({email, password});
+      if(error){ msg.textContent = 'wrong email or password.'; }
+      else{ renderAdmin(); }
     });
     return;
   }
   area.innerHTML = `
     <h2 class="section-title">console</h2>
+    <div style="text-align:right;margin-bottom:10px;">
+      <button class="btn red" id="logoutBtn" style="padding:6px 12px;font-size:.78rem;">log out</button>
+    </div>
     <div class="admin-block">
       <h4>new entry</h4>
       <label>title</label>
@@ -470,6 +477,10 @@ function renderAdmin(){
   document.getElementById('publishBtn').addEventListener('click', publishPost);
   document.getElementById('addTopicBtn').addEventListener('click', addTopic);
   document.getElementById('saveAboutBtn').addEventListener('click', saveAbout);
+  document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+    await sb.auth.signOut();
+    renderAdmin();
+  });
 }
 
 async function loadManageList(){
@@ -535,4 +546,4 @@ async function saveAbout(){
 })();
 </script>
 </body>
-</html>
+</html
